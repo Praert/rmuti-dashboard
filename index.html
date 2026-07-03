@@ -231,7 +231,7 @@
 
     .filters {
       display: grid;
-      grid-template-columns: minmax(220px, 1fr) minmax(145px, 170px) minmax(145px, 170px) minmax(170px, 210px) minmax(170px, 210px) minmax(110px, 130px);
+      grid-template-columns: minmax(220px, 1fr) repeat(5, minmax(145px, 190px)) minmax(110px, 130px);
       gap: 10px;
       padding: 16px 18px 12px;
     }
@@ -446,6 +446,9 @@
           <select class="control" id="facultyFilter">
             <option value="">ทุกคณะ</option>
           </select>
+          <select class="control" id="programFilter">
+            <option value="">ทุกสาขาวิชา</option>
+          </select>
           <select class="control" id="pageSize">
             <option value="10">10 แถว</option>
             <option value="25" selected>25 แถว</option>
@@ -496,6 +499,7 @@
       level: "",
       education: "",
       faculty: "",
+      program: "",
       pageSize: 25,
       sortKey: "studentNo",
       sortDir: "asc"
@@ -549,6 +553,7 @@
         .filter(row => !state.level || row.cefrPlacement === state.level)
         .filter(row => !state.education || row.education === state.education)
         .filter(row => !state.faculty || row.faculty === state.faculty)
+        .filter(row => !state.program || row.program === state.program)
         .filter(row => {
           if (!keyword) return true;
           return [
@@ -721,6 +726,11 @@
       renderView();
     });
 
+    document.getElementById("programFilter").addEventListener("change", event => {
+      state.program = event.target.value;
+      renderView();
+    });
+
     document.getElementById("pageSize").addEventListener("change", event => {
       state.pageSize = Number(event.target.value);
       renderView();
@@ -738,6 +748,7 @@
     addOptions("levelFilter", Object.keys(colors).filter(level => records.some(row => row.cefrPlacement === level)));
     addOptions("educationFilter", uniqueValues("education"));
     addOptions("facultyFilter", uniqueValues("faculty"));
+    addOptions("programFilter", uniqueValues("program"));
     renderView();
   </script>
 </body>
